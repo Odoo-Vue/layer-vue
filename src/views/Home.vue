@@ -1,18 +1,34 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Vue logo" src="@/assets/logo.png">
+    <br/>
+    <p>Please add the param 'cors' to the route in Odoo</p>
+    <pre>
+      @http.route('/web/session/authenticate', type='json', auth="none", cors="*")
+    </pre>
+    <button @click="connect()">Connect to Odoo</button>
+    <div v-if="response">
+      <p>{{ response }}</p>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import odooLayer from '@/lib/odoo'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      response: false
+    }
+  },
+  methods: {
+    connect() {
+      odooLayer.connect('admin', 'admin', (response) => {
+        this.response = response
+      })
+    }
   }
 }
 </script>
